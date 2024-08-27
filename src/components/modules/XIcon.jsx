@@ -1,9 +1,9 @@
-import { CiMedicalCross } from "react-icons/ci";
+import { ImCross } from "react-icons/im";
 
-function XIcon() {
+function XIcon({ size }) {
   return (
-    <div className="rotate-45">
-      <CiMedicalCross />
+    <div>
+      <ImCross size={size} color="#4281f8" />
     </div>
   )
 }

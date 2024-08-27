@@ -1,10 +1,10 @@
 import { FaDotCircle } from "react-icons/fa";
 
 
-function OIcon({size}) {
+function OIcon({ size }) {
     return (
-        <div className="h-14 bg-gradient-to-r from-purple-500 to-pink-500">
-            <FaDotCircle size={size} color="red"/>
+        <div>
+            <FaDotCircle size={size} color="#f99d17" />
         </div>
     )
 }

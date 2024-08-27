@@ -1,15 +1,11 @@
-import './App.css'
-import OIcon from './components/modules/oIcon';
-import XIcon from './components/modules/xIcon';
+import MainMenu from './components/MainMenu';
 
 function App() {
 
   return (
-    <div>
-      test
-      <OIcon size={30} />
-      <XIcon />
-    </div>
+    <>
+      <MainMenu />
+    </>
   )
 }
 
