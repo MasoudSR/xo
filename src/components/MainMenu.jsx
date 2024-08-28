@@ -13,13 +13,13 @@ function MainMenu() {
             <p className={`transition-all duration-300 ${playMode === "ai" ? "scale-100 h-16" : "scale-0 h-0"}`}>Pick your side</p>
             <div className={`flex justify-center transition-all ${playMode === "ai" ? "gap-16" : "gap-0"}`}>
                 <div className={`transition-all duration-500 relative w-20 h-24 ${playMode === "ai" ? playerSide === "x" ? "scale-110 opacity-100" : "scale-90 opacity-40" : "scale-100 opacity-100"}`}>
-                    <button onClick={() => setPlayerSide("x")} disabled={playMode !== "ai"} className='z-10 absolute drop-shadow-md'>
+                    <button onClick={() => setPlayerSide("x")} disabled={playMode !== "ai"} className='z-10 absolute'>
                         <XIcon size={80} />
                     </button>
                     <div className='w-20 h-7 bg-blue-500 blur-lg rounded-full absolute bottom-0 left-0 z-0'></div>
                 </div>
                 <div className={`transition-all duration-500 relative w-20 h-24 ${playMode === "ai" ? playerSide === "o" ? "scale-110 opacity-100" : "scale-90 opacity-40" : "scale-100 opacity-100"}`}>
-                    <button onClick={() => setPlayerSide("o")} disabled={playMode !== "ai"} className='z-10 absolute drop-shadow-md'>
+                    <button onClick={() => setPlayerSide("o")} disabled={playMode !== "ai"} className='z-10 absolute'>
                         <OIcon size={84} />
                     </button>
                     <div className='w-20 h-7 bg-orange-500 blur-lg rounded-full absolute left-1 bottom-0 z-0'></div>
@@ -42,7 +42,7 @@ function MainMenu() {
             </div>
             <button className='drop-shadow-md rounded-full flex bg-slate-200 overflow-hidden'>
                 <button className={`h-8 transition-all duration-300 bg-white ${playMode !== "" ? "w-20 border-r" : "w-0 border-none"}`} onClick={() => setPlayMode("")}>Back</button>
-                <button className={`h-8 transition-all duration-300 flex justify-center items-center bg-white ${playMode === "" ? "w-8" : "w-0"}`} onClick={() => setPlayMode("")}><IoMdSettings size={20} color='#4281f8' /></button>
+                {/* <button className={`h-8 transition-all duration-300 flex justify-center items-center bg-white ${playMode === "" ? "w-8" : "w-0"}`} onClick={() => setPlayMode("")}><IoMdSettings size={20} color='#4281f8' /></button> */}
                 <button className={`h-8 transition-all duration-300  bg-white ${playMode === "ai" ? "w-32" : "w-0"}`} onClick={() => setPlayMode("")}>Continue</button>
             </button>
         </div>)
