@@ -4,13 +4,28 @@ import { useState } from 'react'
 import { winnerCalc } from '../helpers/winnerCalc'
 import XIcon from './modules/XIcon';
 import OIcon from './modules/OIcon';
+import Modal from './Modal';
+import Settings from './Settings';
+import GameResults from './GameResults';
 
-function GameBoard() {
+function GameBoard({ gameMode, setGameMode }) {
 
     const [tilesValue, setTilesValue] = useState(Array(9).fill(""))
     const [xIsNext, setXIsNext] = useState(true)
     const [scoreBoard, setScoreBoard] = useState({ x: 0, o: 0 })
     const [gameStarted, setGameStarted] = useState(true)
+    const [isQuit, setIsQuit] = useState(false)
+    const [settingsMenu , setSettingsMenu] = useState(false)
+    const [showGameResults , setShowGameResults ] =useState(false) 
+
+    const quit = () => {
+        setSettingsMenu(false)
+        setShowGameResults(false)
+        setIsQuit(true)
+        setTimeout(() => {
+            setGameMode("")
+        }, 300);
+    }
 
     const clickHandler = (i) => {
         if (tilesValue[i] || winnerCalc(tilesValue)) {
@@ -27,6 +42,7 @@ function GameBoard() {
         const newScoreBoard = { ...scoreBoard, [winner]: scoreBoard[winner] + 1 }
         setScoreBoard(newScoreBoard)
         setGameStarted(false)
+        setShowGameResults(true)
     }
 
     const restartGame = () => {
@@ -35,10 +51,10 @@ function GameBoard() {
     }
 
     return (
-        <div>
-            <div className='grid grid-cols-3 items-center justify-items-center'>
+        <div className={`transition-all duration-300 ${isQuit && "scale-0"}`}>
+            <div className='grid grid-cols-3 items-center justify-items-center animate-fade-down animate-duration-500'>
                 <div className={`transition-all duration-500 relative w-20 h-24 ${xIsNext ? "scale-110 opacity-100" : "scale-90 opacity-40"}`}>
-                        <XIcon size={50} />
+                    <XIcon size={50} />
                     <div className='w-20 h-7 bg-blue-500 blur-lg rounded-full absolute bottom-0 left-0 z-0'></div>
                     <p>Player1</p>
                 </div>
@@ -46,12 +62,12 @@ function GameBoard() {
                     {scoreBoard.x} - {scoreBoard.o}
                 </div>
                 <div className={`transition-all duration-500 relative w-20 h-24 ${!xIsNext ? "scale-110 opacity-100" : "scale-90 opacity-40"}`}>
-                        <OIcon size={50} />
+                    <OIcon size={50} />
                     <div className='w-20 h-7 bg-orange-500 blur-lg rounded-full absolute bottom-0 left-0 z-0'></div>
                     <p>Player2</p>
                 </div>
             </div>
-            <div className='bg-white drop-shadow-md p-4 mt-3 rounded-xl'>
+            <div className='bg-white drop-shadow-md p-4 mt-3 rounded-xl animate-fade'>
                 <div className='bg-slate-200 grid grid-rows-3 grid-cols-3 gap-[1px]'>
                     <Tile value={tilesValue[0]} onTileClick={() => clickHandler(0)} />
                     <Tile value={tilesValue[1]} onTileClick={() => clickHandler(1)} />
@@ -64,8 +80,12 @@ function GameBoard() {
                     <Tile value={tilesValue[8]} onTileClick={() => clickHandler(8)} />
                 </div>
             </div>
-            <button className="m-auto mt-14 drop-shadow-md rounded-full overflow-hidden h-8 transition-all duration-300 flex justify-center items-center bg-white w-8"><IoMdSettings size={20} color='#4281f8' /></button>
-            <button className="m-auto mt-14 drop-shadow-md rounded-full overflow-hidden h-8 transition-all duration-300 flex justify-center items-center bg-white w-8" onClick={restartGame}>Restart</button>
+            <div className='animate-fade-up animate-duration-500'>
+                <button className="m-auto mt-14 drop-shadow-md rounded-full overflow-hidden h-8 transition-all duration-300 flex justify-center items-center bg-white w-8" onClick={()=>setSettingsMenu(true)}><IoMdSettings size={20} color='#4281f8' /></button>
+                <button className="m-auto mt-14 drop-shadow-md rounded-full overflow-hidden h-8 transition-all duration-300 flex justify-center items-center bg-white" onClick={restartGame}>Restart</button>
+            </div>
+            {settingsMenu && <Modal ModalContent={<Settings quit={quit} setSettingsMenu={setSettingsMenu} />} />}
+            {showGameResults && <Modal ModalContent={<GameResults quit={quit} setShowGameResults={setShowGameResults} winner={winner} restartGame={restartGame} />} />}
         </div>
     )
 }

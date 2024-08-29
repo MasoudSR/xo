@@ -13,6 +13,8 @@ export function winnerCalc(tilesValue) {
       const [a, b, c] = lines[i];
       if (tilesValue[a] && tilesValue[a] === tilesValue[b] && tilesValue[a] === tilesValue[c]) {
         return tilesValue[a];
+      }else if (!tilesValue.includes("")) {
+        return "draw"
       }
     }
     return null;
