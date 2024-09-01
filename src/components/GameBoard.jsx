@@ -1,7 +1,7 @@
 import { IoMdSettings } from 'react-icons/io'
 import Tile from './modules/Tile'
 import { useEffect, useState } from 'react'
-import { winnerCalc } from '../helpers/winnerCalc'
+import { winnerCalc, winnerDirection } from '../helpers/winnerCalc'
 import XIcon from './modules/XIcon';
 import OIcon from './modules/OIcon';
 import Modal from './Modal';
@@ -19,6 +19,7 @@ function GameBoard({ gameMode, setGameMode, sides }) {
     const [settingsMenu, setSettingsMenu] = useState(false)
     const [showGameResults, setShowGameResults] = useState(false)
     const [aiTurn, setAiTurn] = useState(false)
+    const [lineDirection, setLineDirection] = useState("");
 
     useEffect(() => {
         sides.player === "o" && setAiTurn(true)
@@ -67,12 +68,23 @@ function GameBoard({ gameMode, setGameMode, sides }) {
         const newScoreBoard = { ...scoreBoard, [winner]: scoreBoard[winner] + 1 }
         setScoreBoard(newScoreBoard)
         setGameStarted(false)
-        setShowGameResults(true)
+        if (winner === "draw") {
+            setTimeout(() => {
+                setShowGameResults(true)
+            }, 400);
+        } else {
+            const winnerLine = winnerDirection(tilesValue)
+            setLineDirection(winnerLine)
+            setTimeout(() => {
+                setShowGameResults(true)
+            }, 1500);
+        }
     }
 
     const restartGame = () => {
         setTilesValue(Array(9).fill(""))
         setGameStarted(true)
+        setLineDirection()
     }
 
     return (
@@ -97,7 +109,7 @@ function GameBoard({ gameMode, setGameMode, sides }) {
                     </p>
                 </div>
             </div>
-            <div className='bg-white drop-shadow-md p-4 mt-3 rounded-xl animate-fade'>
+            <div className='bg-white relative drop-shadow-md p-4 mt-3 rounded-xl animate-fade'>
                 <div className='bg-slate-200 grid grid-rows-3 grid-cols-3 gap-[1px]'>
                     <Tile value={tilesValue[0]} onTileClick={() => clickHandler(0)} />
                     <Tile value={tilesValue[1]} onTileClick={() => clickHandler(1)} />
@@ -108,6 +120,9 @@ function GameBoard({ gameMode, setGameMode, sides }) {
                     <Tile value={tilesValue[6]} onTileClick={() => clickHandler(6)} />
                     <Tile value={tilesValue[7]} onTileClick={() => clickHandler(7)} />
                     <Tile value={tilesValue[8]} onTileClick={() => clickHandler(8)} />
+                    <div
+                        className={`absolute h-0 w-0 ${lineDirection === 'vertical' ? 'transition-height-width duration-500 h-[calc(100%-32px)] w-[2px] left-1/2' : ''} ${lineDirection === 'horizontal' ? 'transition-height-width duration-500 w-[calc(100%-32px)] h-[2px] top-1/2' : ''} ${lineDirection === 'diagonal1' ? 'transition-height-width duration-500 w-[calc(125%)] h-[2px] top-4 left-4 rotate-45 origin-top-left' : ''} ${lineDirection === 'diagonal2' ? 'transition-height-width duration-500 w-[calc(125%)] h-[2px] bottom-4 left-4 -rotate-45 origin-top-left' : ''} ${lineDirection === 'top' ? 'transition-height-width duration-500 w-[calc(100%-32px)] h-[2px] top-14' : ''} ${lineDirection === 'bottom' ? 'transition-height-width duration-500 w-[calc(100%-32px)] h-[2px] bottom-14' : ''} ${lineDirection === 'left' ? 'transition-height-width duration-500 h-[calc(100%-32px)] w-[2px] left-14' : ''} ${lineDirection === 'right' ? 'transition-height-width duration-500 h-[calc(100%-32px)] w-[2px] right-14' : ''} bg-black`}
+                    ></div>
                 </div>
             </div>
             <div className='animate-fade-up animate-duration-500'>

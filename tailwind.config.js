@@ -3,7 +3,11 @@
 export default {
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
 	theme: {
-		extend: {},
+		extend: {
+			transitionProperty: {
+				'height-width': 'height, width' ,
+			},
+		},
 	},
 	plugins: [require("tailwindcss-animated")],
 };
