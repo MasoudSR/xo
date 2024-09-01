@@ -78,18 +78,23 @@ function GameBoard({ gameMode, setGameMode, sides }) {
     return (
         <div className={`transition-all duration-300 ${isQuit && "scale-0"}`}>
             <div className='grid grid-cols-3 items-center justify-items-center animate-fade-down animate-duration-500'>
-                <div className={`transition-all duration-500 relative w-20 h-24 ${xIsNext ? "scale-110 opacity-100" : "scale-90 opacity-40"}`}>
+                <div className={`transition-all duration-500 relative w-20 h-24 flex flex-col justify-center items-center ${xIsNext ? "scale-110 opacity-100" : "scale-90 opacity-40"}`}>
                     <XIcon size={50} />
+                    <p className='text-blue-900'>
+                        {gameMode === "ai" ? sides.player === "x" ? "Player" : "AI" : "Player1"}
+                    </p>
                     <div className='w-20 h-7 bg-blue-500 blur-lg rounded-full absolute bottom-0 left-0 z-0'></div>
-                    <p>Player1</p>
                 </div>
-                <div className='bg-white drop-shadow-md py-1 px-3 rounded-full'>
-                    {scoreBoard.x} - {scoreBoard.o}
+                <div className='bg-white py-1 px-1 flex drop-shadow-md rounded-full overflow-hidden'>
+                    <div className='border-r px-3'>{scoreBoard.x}</div>
+                    <div className='px-3'>{scoreBoard.o}</div>
                 </div>
-                <div className={`transition-all duration-500 relative w-20 h-24 ${!xIsNext ? "scale-110 opacity-100" : "scale-90 opacity-40"}`}>
+                <div className={`transition-all duration-500 relative w-20 h-24 flex flex-col justify-center items-center ${!xIsNext ? "scale-110 opacity-100" : "scale-90 opacity-40"}`}>
                     <OIcon size={50} />
                     <div className='w-20 h-7 bg-orange-500 blur-lg rounded-full absolute bottom-0 left-0 z-0'></div>
-                    <p>Player2</p>
+                    <p className='text-orange-900'>
+                        {gameMode === "ai" ? sides.player === "o" ? "Player1 " : "AI" : "Player2"}
+                    </p>
                 </div>
             </div>
             <div className='bg-white drop-shadow-md p-4 mt-3 rounded-xl animate-fade'>
