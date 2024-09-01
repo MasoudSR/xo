@@ -7,6 +7,7 @@ import OIcon from './modules/OIcon';
 import Modal from './Modal';
 import Settings from './Settings';
 import GameResults from './GameResults';
+import { bestMove } from '../helpers/ai';
 
 function GameBoard({ gameMode, setGameMode }) {
 
@@ -15,8 +16,9 @@ function GameBoard({ gameMode, setGameMode }) {
     const [scoreBoard, setScoreBoard] = useState({ x: 0, o: 0 })
     const [gameStarted, setGameStarted] = useState(true)
     const [isQuit, setIsQuit] = useState(false)
-    const [settingsMenu , setSettingsMenu] = useState(false)
-    const [showGameResults , setShowGameResults ] =useState(false) 
+    const [settingsMenu, setSettingsMenu] = useState(false)
+    const [showGameResults, setShowGameResults] = useState(false)
+    const [aiTurn, setAiTurn] = useState(false)
 
     const quit = () => {
         setSettingsMenu(false)
@@ -35,9 +37,24 @@ function GameBoard({ gameMode, setGameMode }) {
         xIsNext ? newTilesValue[i] = "x" : newTilesValue[i] = "o"
         setTilesValue(newTilesValue)
         setXIsNext(!xIsNext)
+        setAiTurn(true)
+
     }
 
     const winner = winnerCalc(tilesValue)
+
+    if (gameMode === "ai" && !winner && aiTurn) {
+        const newTilesValue = tilesValue.slice()
+        if (!winnerCalc(newTilesValue) && newTilesValue.some(tile => tile === "")) {
+            const aiMove = bestMove(tilesValue);
+            newTilesValue[aiMove] = 'o';
+            setTilesValue(newTilesValue);
+            setXIsNext(true);
+        }
+        setAiTurn(false)
+    }
+
+
     if (winner && gameStarted) {
         const newScoreBoard = { ...scoreBoard, [winner]: scoreBoard[winner] + 1 }
         setScoreBoard(newScoreBoard)
@@ -81,8 +98,7 @@ function GameBoard({ gameMode, setGameMode }) {
                 </div>
             </div>
             <div className='animate-fade-up animate-duration-500'>
-                <button className="m-auto mt-14 drop-shadow-md rounded-full overflow-hidden h-8 transition-all duration-300 flex justify-center items-center bg-white w-8" onClick={()=>setSettingsMenu(true)}><IoMdSettings size={20} color='#4281f8' /></button>
-                <button className="m-auto mt-14 drop-shadow-md rounded-full overflow-hidden h-8 transition-all duration-300 flex justify-center items-center bg-white" onClick={restartGame}>Restart</button>
+                <button className="m-auto mt-14 drop-shadow-md rounded-full overflow-hidden h-8 transition-all duration-300 flex justify-center items-center bg-white w-8" onClick={() => setSettingsMenu(true)}><IoMdSettings size={20} color='#4281f8' /></button>
             </div>
             {settingsMenu && <Modal ModalContent={<Settings quit={quit} setSettingsMenu={setSettingsMenu} />} />}
             {showGameResults && <Modal ModalContent={<GameResults quit={quit} setShowGameResults={setShowGameResults} winner={winner} restartGame={restartGame} />} />}

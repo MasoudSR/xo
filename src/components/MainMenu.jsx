@@ -51,7 +51,7 @@ function MainMenu({ setGameMode }) {
             <button className='drop-shadow-md rounded-full flex bg-slate-200 overflow-hidden'>
                 <button className={`h-8 transition-all duration-300 bg-white ${playMode !== "" ? "w-20 border-r" : "w-0 border-none"}`} onClick={() => setPlayMode("")}>Back</button>
                 {/* <button className={`h-8 transition-all duration-300 flex justify-center items-center bg-white ${playMode === "" ? "w-8" : "w-0"}`} onClick={() => setPlayMode("")}><IoMdSettings size={20} color='#4281f8' /></button> */}
-                <button className={`h-8 transition-all duration-300  bg-white ${playMode === "ai" ? "w-32" : "w-0"}`} onClick={() => setGameMode("ai")} disabled>Continue</button>
+                <button className={`h-8 transition-all duration-300  bg-white ${playMode === "ai" ? "w-32" : "w-0"}`} onClick={() => setGameMode("ai")}>Continue</button>
             </button>
         </div>)
 }
