@@ -5,11 +5,12 @@ import MainMenu from './components/MainMenu';
 function App() {
 
   const [gameMode, setGameMode] = useState("")
+  const [sides, setSides] = useState({ player: "x", ai: "o" })
 
   if (!gameMode) {
-    return <MainMenu setGameMode={setGameMode} />
-  }else{
-    return <GameBoard gameMode={gameMode} setGameMode={setGameMode} />
+    return <MainMenu setGameMode={setGameMode} sides={sides} setSides={setSides} />
+  } else {
+    return <GameBoard gameMode={gameMode} setGameMode={setGameMode} sides={sides} />
   }
 }
 

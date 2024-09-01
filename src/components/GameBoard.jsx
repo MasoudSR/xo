@@ -1,6 +1,6 @@
 import { IoMdSettings } from 'react-icons/io'
 import Tile from './modules/Tile'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { winnerCalc } from '../helpers/winnerCalc'
 import XIcon from './modules/XIcon';
 import OIcon from './modules/OIcon';
@@ -9,7 +9,7 @@ import Settings from './Settings';
 import GameResults from './GameResults';
 import { bestMove } from '../helpers/ai';
 
-function GameBoard({ gameMode, setGameMode }) {
+function GameBoard({ gameMode, setGameMode, sides }) {
 
     const [tilesValue, setTilesValue] = useState(Array(9).fill(""))
     const [xIsNext, setXIsNext] = useState(true)
@@ -19,6 +19,11 @@ function GameBoard({ gameMode, setGameMode }) {
     const [settingsMenu, setSettingsMenu] = useState(false)
     const [showGameResults, setShowGameResults] = useState(false)
     const [aiTurn, setAiTurn] = useState(false)
+
+    useEffect(() => {
+        sides.player === "o" && setAiTurn(true)
+    }, [])
+
 
     const quit = () => {
         setSettingsMenu(false)
@@ -34,7 +39,11 @@ function GameBoard({ gameMode, setGameMode }) {
             return
         }
         const newTilesValue = tilesValue.slice()
-        xIsNext ? newTilesValue[i] = "x" : newTilesValue[i] = "o"
+        if (gameMode === "ai") {
+            newTilesValue[i] = sides.player
+        } else {
+            xIsNext ? newTilesValue[i] = "x" : newTilesValue[i] = "o"
+        }
         setTilesValue(newTilesValue)
         setXIsNext(!xIsNext)
         setAiTurn(true)
@@ -42,14 +51,13 @@ function GameBoard({ gameMode, setGameMode }) {
     }
 
     const winner = winnerCalc(tilesValue)
-
     if (gameMode === "ai" && !winner && aiTurn) {
         const newTilesValue = tilesValue.slice()
         if (!winnerCalc(newTilesValue) && newTilesValue.some(tile => tile === "")) {
-            const aiMove = bestMove(tilesValue);
-            newTilesValue[aiMove] = 'o';
+            const aiMove = bestMove(tilesValue, sides);
+            newTilesValue[aiMove] = sides.ai;
             setTilesValue(newTilesValue);
-            setXIsNext(true);
+            setXIsNext(!xIsNext)
         }
         setAiTurn(false)
     }

@@ -1,15 +1,14 @@
 import XIcon from './modules/XIcon';
 import OIcon from './modules/OIcon';
-import { IoMdSettings } from "react-icons/io";
+// import { IoMdSettings } from "react-icons/io";
 import { useState } from 'react';
 
-function MainMenu({ setGameMode }) {
+function MainMenu({ setGameMode, sides, setSides }) {
 
     const [playMode, setPlayMode] = useState("")
-    const [playerSide, setPlayerSide] = useState("x")
     const [isQuit, setIsQuit] = useState(false)
 
-    const changeMode = (gameMode)=>{
+    const changeMode = (gameMode) => {
         setIsQuit(true)
         setTimeout(() => {
             setGameMode(gameMode)
@@ -20,14 +19,14 @@ function MainMenu({ setGameMode }) {
         <div className={`flex flex-col items-center transition-all animate-fade-up ${isQuit && "animate-jump-out animate-duration-[400ms]"}`}>
             <p className={`transition-all duration-300 ${playMode === "ai" ? "scale-100 h-16" : "scale-0 h-0"}`}>Pick your side</p>
             <div className={`flex justify-center transition-all ${playMode === "ai" ? "gap-16" : "gap-0"}`}>
-                <div className={`transition-all duration-500 relative w-20 h-24 ${playMode === "ai" ? playerSide === "x" ? "scale-110 opacity-100" : "scale-90 opacity-40" : "scale-100 opacity-100"}`}>
-                    <button onClick={() => setPlayerSide("x")} disabled={playMode !== "ai"} className='z-10 absolute'>
+                <div className={`transition-all duration-500 relative w-20 h-24 ${playMode === "ai" ? sides.player === "x" ? "scale-110 opacity-100" : "scale-90 opacity-40" : "scale-100 opacity-100"}`}>
+                    <button onClick={() => setSides({ player: "x", ai: "o" })} disabled={playMode !== "ai"} className='z-10 absolute'>
                         <XIcon size={80} />
                     </button>
                     <div className='w-20 h-7 bg-blue-500 blur-lg rounded-full absolute bottom-0 left-0 z-0'></div>
                 </div>
-                <div className={`transition-all duration-500 relative w-20 h-24 ${playMode === "ai" ? playerSide === "o" ? "scale-110 opacity-100" : "scale-90 opacity-40" : "scale-100 opacity-100"}`}>
-                    <button onClick={() => setPlayerSide("o")} disabled={playMode !== "ai"} className='z-10 absolute'>
+                <div className={`transition-all duration-500 relative w-20 h-24 ${playMode === "ai" ? sides.player === "o" ? "scale-110 opacity-100" : "scale-90 opacity-40" : "scale-100 opacity-100"}`}>
+                    <button onClick={() => setSides({ player: "o", ai: "x" })} disabled={playMode !== "ai"} className='z-10 absolute'>
                         <OIcon size={84} />
                     </button>
                     <div className='w-20 h-7 bg-orange-500 blur-lg rounded-full absolute left-1 bottom-0 z-0'></div>
