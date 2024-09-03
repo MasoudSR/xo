@@ -20,9 +20,15 @@ function GameBoard({ gameMode, setGameMode, sides }) {
     const [showGameResults, setShowGameResults] = useState(false)
     const [aiTurn, setAiTurn] = useState(false)
     const [lineDirection, setLineDirection] = useState("");
+    const [playersName, setPlayersName] = useState({ player1: { name: "Player1", symbol: "x" }, player2: { name: "Player2", symbol: "o" } })
 
     useEffect(() => {
         sides.player === "o" && setAiTurn(true)
+        if (gameMode === "ai") {
+            if (sides.player === "x") { setPlayersName({ player1: { name: "Player", symbol: "x" }, player2: { name: "AI", symbol: "o" } }) } else {
+                setPlayersName({ player1: { name: "AI", symbol: "x" }, player2: { name: "Player", symbol: "o" } })
+            }
+        }
     }, [])
 
 
@@ -93,7 +99,7 @@ function GameBoard({ gameMode, setGameMode, sides }) {
                 <div className={`transition-all duration-500 relative w-20 h-24 flex flex-col justify-center items-center ${xIsNext ? "scale-110 opacity-100" : "scale-90 opacity-40"}`}>
                     <XIcon size={50} />
                     <p className='text-blue-900'>
-                        {gameMode === "ai" ? sides.player === "x" ? "Player" : "AI" : "Player1"}
+                        {playersName.player1.name}
                     </p>
                     <div className='w-20 h-7 bg-blue-500 blur-lg rounded-full absolute bottom-0 left-0 z-0'></div>
                 </div>
@@ -105,7 +111,7 @@ function GameBoard({ gameMode, setGameMode, sides }) {
                     <OIcon size={50} />
                     <div className='w-20 h-7 bg-orange-500 blur-lg rounded-full absolute bottom-0 left-0 z-0'></div>
                     <p className='text-orange-900'>
-                        {gameMode === "ai" ? sides.player === "o" ? "Player1 " : "AI" : "Player2"}
+                        {playersName.player2.name}
                     </p>
                 </div>
             </div>
@@ -129,7 +135,7 @@ function GameBoard({ gameMode, setGameMode, sides }) {
                 <button className="m-auto mt-14 drop-shadow-md rounded-full overflow-hidden h-8 transition-all duration-300 flex justify-center items-center bg-white w-8" onClick={() => setSettingsMenu(true)}><IoMdSettings size={20} color='#4281f8' /></button>
             </div>
             {settingsMenu && <Modal ModalContent={<Settings quit={quit} setSettingsMenu={setSettingsMenu} />} />}
-            {showGameResults && <Modal ModalContent={<GameResults quit={quit} setShowGameResults={setShowGameResults} winner={winner} restartGame={restartGame} />} />}
+            {showGameResults && <Modal ModalContent={<GameResults quit={quit} setShowGameResults={setShowGameResults} winner={winner} playersName={playersName} restartGame={restartGame} scoreBoard={scoreBoard} />} />}
         </div>
     )
 }
