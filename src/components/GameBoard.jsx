@@ -9,7 +9,7 @@ import Settings from './Settings';
 import GameResults from './GameResults';
 import { bestMove } from '../helpers/ai';
 
-function GameBoard({ gameMode, setGameMode, sides }) {
+function GameBoard({ gameMode, setGameMode, sides, connection, playerNumber }) {
 
     const [tilesValue, setTilesValue] = useState(Array(9).fill(""))
     const [xIsNext, setXIsNext] = useState(true)
@@ -18,18 +18,32 @@ function GameBoard({ gameMode, setGameMode, sides }) {
     const [isQuit, setIsQuit] = useState(false)
     const [settingsMenu, setSettingsMenu] = useState(false)
     const [showGameResults, setShowGameResults] = useState(false)
-    const [aiTurn, setAiTurn] = useState(false)
+    const [playerTurn, setPlayerTurn] = useState(true)
     const [lineDirection, setLineDirection] = useState("");
     const [playersName, setPlayersName] = useState({ player1: { name: "Player1", symbol: "x" }, player2: { name: "Player2", symbol: "o" } })
 
     useEffect(() => {
-        sides.player === "o" && setAiTurn(true)
+        sides.player === "o" && setPlayerTurn(false)
         if (gameMode === "ai") {
             if (sides.player === "x") { setPlayersName({ player1: { name: "Player", symbol: "x" }, player2: { name: "AI", symbol: "o" } }) } else {
                 setPlayersName({ player1: { name: "AI", symbol: "x" }, player2: { name: "Player", symbol: "o" } })
             }
         }
+        if (playerNumber === 2) {
+            setPlayerTurn(false)
+            // setXIsNext(false)
+        }
     }, [])
+
+    useEffect(() => {
+        if (connection) {
+            connection.on('data', (data) => {
+                setTilesValue(data);
+                setPlayerTurn(true)
+                setXIsNext((prevXIsNext) => !prevXIsNext);
+            })
+        }
+    }, [connection]);
 
 
     const quit = () => {
@@ -42,23 +56,37 @@ function GameBoard({ gameMode, setGameMode, sides }) {
     }
 
     const clickHandler = (i) => {
-        if (tilesValue[i] || winnerCalc(tilesValue)) {
-            return
-        }
-        const newTilesValue = tilesValue.slice()
-        if (gameMode === "ai") {
-            newTilesValue[i] = sides.player
-        } else {
-            xIsNext ? newTilesValue[i] = "x" : newTilesValue[i] = "o"
-        }
-        setTilesValue(newTilesValue)
-        setXIsNext(!xIsNext)
-        setAiTurn(true)
+        if (playerTurn) {
 
+            if (tilesValue[i] || winnerCalc(tilesValue)) {
+                return
+            }
+            const newTilesValue = tilesValue.slice()
+            if (gameMode === "ai") {
+                newTilesValue[i] = sides.player
+            } else if (gameMode === "online") {
+                playerNumber === 1 ? newTilesValue[i] = "x" : newTilesValue[i] = "o"
+            } else {
+                xIsNext ? newTilesValue[i] = "x" : newTilesValue[i] = "o"
+            }
+            setTilesValue(newTilesValue)
+            setXIsNext(!xIsNext)
+
+            gameMode !== "local" && setPlayerTurn(false)
+
+            if (gameMode === "online") {
+                if (connection) {
+                    console.log("connection is", connection)
+                    console.log("Sending data:", newTilesValue);
+                    connection.send(newTilesValue);
+                }
+
+            }
+        }
     }
 
     const winner = winnerCalc(tilesValue)
-    if (gameMode === "ai" && !winner && aiTurn) {
+    if (gameMode === "ai" && !winner && !playerTurn) {
         const newTilesValue = tilesValue.slice()
         if (!winnerCalc(newTilesValue) && newTilesValue.some(tile => tile === "")) {
             const aiMove = bestMove(tilesValue, sides);
@@ -66,7 +94,7 @@ function GameBoard({ gameMode, setGameMode, sides }) {
             setTilesValue(newTilesValue);
             setXIsNext(!xIsNext)
         }
-        setAiTurn(false)
+        setPlayerTurn(true)
     }
 
 
