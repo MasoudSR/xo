@@ -8,6 +8,7 @@ import Modal from './Modal';
 import Settings from './Settings';
 import GameResults from './GameResults';
 import { bestMove } from '../helpers/ai';
+import toast from 'react-hot-toast';
 
 function GameBoard({ gameMode, setGameMode, sides, connection, playerNumber }) {
 
@@ -37,9 +38,17 @@ function GameBoard({ gameMode, setGameMode, sides, connection, playerNumber }) {
     useEffect(() => {
         if (connection) {
             connection.on('data', (data) => {
-                setTilesValue(data);
-                setPlayerTurn(true)
-                setXIsNext((prevXIsNext) => !prevXIsNext);
+                if (data === "quit") {
+                    connection.close();
+                    setGameMode("")
+                    setTimeout(() => {
+                        toast("Your friend left the game!", { icon: "😢", duration: 5000 })
+                    }, 1000);
+                } else {
+                    setTilesValue(data);
+                    setPlayerTurn(true)
+                    setXIsNext((prevXIsNext) => !prevXIsNext);
+                }
             })
         }
     }, [connection]);
@@ -49,6 +58,12 @@ function GameBoard({ gameMode, setGameMode, sides, connection, playerNumber }) {
         setSettingsMenu(false)
         setShowGameResults(false)
         setIsQuit(true)
+        if (gameMode === "online") {
+            if (connection && connection.open) {
+                connection.send("quit");
+                connection.close();
+            }
+        }
         setTimeout(() => {
             setGameMode("")
         }, 300);
@@ -75,8 +90,6 @@ function GameBoard({ gameMode, setGameMode, sides, connection, playerNumber }) {
 
             if (gameMode === "online") {
                 if (connection) {
-                    console.log("connection is", connection)
-                    console.log("Sending data:", newTilesValue);
                     connection.send(newTilesValue);
                 }
 

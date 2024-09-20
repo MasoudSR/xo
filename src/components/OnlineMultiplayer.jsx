@@ -120,11 +120,11 @@ const OnlineMultiplayer = ({ setConnection, changeMode, setPlayerNumber, setOnli
             {peerId ?
               <div className="flex text-white justify-between items-center">
                 <div>
-                  <p className="text-[11px] sm:text-xs">Send your id to your friend</p>
-                  <p className="text-[15px] sm:text-sm w-full mr-2">{peerId ? peerId : "Loading your id"}</p>
+                  <p className="text-xs">Send your id to your friend</p>
+                  <p className="text-sm w-full mr-2">{peerId ? peerId : "Loading your id"}</p>
                 </div>
                 <button
-                  className={`transition-all duration-300 flex flex-col border justify-center items-center rounded-lg h-10 w-10 sm:w-12 sm:h-12  border-gray-200 ${peerId ? "scale-100" : "scale-0"}`}
+                  className={`transition-all duration-300 flex flex-col border justify-center items-center rounded-lg w-12 h-12  border-gray-200 ${peerId ? "scale-100" : "scale-0"}`}
                   onClick={() => {
                     navigator.clipboard.writeText(peerId); toast("ID copied to clipboard")
                   }}>

@@ -14,7 +14,7 @@ function GameResults({ quit, setShowGameResults, winner, playersName, restartGam
         }, 300);
     }
     return (
-        <div className={`w-80 bg-white drop-shadow-md rounded-3xl flex flex-col items-center ${isClosed && "animate-jump-out"}`}>
+        <div className={`w-80 bg-white/80 backdrop-blur-lg drop-shadow-md rounded-3xl flex flex-col items-center ${isClosed && "animate-jump-out"}`}>
             {/* <div className="bg-slate-300 h-10 flex justify-center items-center border rounded-t-xl border-slate-400 drop-shadow-md">Results</div> */}
             <div className="-translate-y-[60%] flex items-center justify-center flex-col">
                 <div className={`w-full h-[50%]  blur-2xl rounded-full absolute top-[50%] right-0 ${winner === "draw" ? "bg-slate-500" : winner === "x" ? "bg-blue-500" : "bg-orange-500"}`}></div>
@@ -53,8 +53,8 @@ function GameResults({ quit, setShowGameResults, winner, playersName, restartGam
                     </div>
                 </div> */}
             <div className="flex flex-col gap-3 p-3 w-full">
-                <button className="drop-shadow-md rounded-full overflow-hidden h-9 w-full transition-all duration-300 flex justify-center items-center bg-sky-500 text-white" onClick={exitGameResults}>Continue Playing</button>
-                <button className="drop-shadow-md rounded-full overflow-hidden h-8 w-full transition-all duration-300 flex justify-center items-center bg-gray-300 text-Black" onClick={quit}>Quit to MainMenu</button>
+                <button className="drop-shadow-md rounded-full overflow-hidden h-12 w-full flex justify-center items-center bg-sky-500 text-white" onClick={exitGameResults}>Continue Playing</button>
+                <button className="drop-shadow-md rounded-full overflow-hidden h-10 w-full flex justify-center items-center bg-slate-200 border border-slate-300 text-Black" onClick={quit}>Quit to MainMenu</button>
             </div>
         </div>
     )
