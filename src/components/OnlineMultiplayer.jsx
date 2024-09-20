@@ -13,7 +13,13 @@ const OnlineMultiplayer = ({ setConnection, changeMode, setPlayerNumber, setOnli
 
 
   useEffect(() => {
-    const newPeer = new Peer();
+    const newPeer = new Peer({
+      config: {
+        'iceServers': [
+          { url: 'stun:stun.1.google.com:19302' },
+        ]
+      }
+    });
     setPeer(newPeer);
 
     newPeer.on('open', (id) => {
@@ -35,8 +41,6 @@ const OnlineMultiplayer = ({ setConnection, changeMode, setPlayerNumber, setOnli
     });
 
   }, [changeMode, setConnection]);
-
-
 
 
   const backHandler = () => {
@@ -131,8 +135,6 @@ const OnlineMultiplayer = ({ setConnection, changeMode, setPlayerNumber, setOnli
       <div className={`transition-all duration-300 overflow-hidden ${mode === "normal" ? "max-h-28" : "max-h-0"}`}>
         <button className={` p-3 mt-4 bg-slate-200 border border-slate-300 rounded-xl text-black w-full`} onClick={cancelHandler}>Cancel</button>
       </div>
-      {/* <p>{message}</p> */}
-      {/* <input type="text" value={inputValue} onChange={handleInputChange} /> */}
     </div>
   );
 };

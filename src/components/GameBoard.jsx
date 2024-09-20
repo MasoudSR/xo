@@ -31,7 +31,6 @@ function GameBoard({ gameMode, setGameMode, sides, connection, playerNumber }) {
         }
         if (playerNumber === 2) {
             setPlayerTurn(false)
-            // setXIsNext(false)
         }
     }, [])
 
