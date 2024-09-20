@@ -11,7 +11,7 @@ function App() {
 
 
   if (!gameMode) {
-    return <MainMenu setGameMode={setGameMode} sides={sides} setSides={setSides} setConnection={setConnection} setPlayerNumber={setPlayerNumber} />
+    return <MainMenu setGameMode={setGameMode} sides={sides} setSides={setSides} connection={connection} setConnection={setConnection} setPlayerNumber={setPlayerNumber} />
   } else {
     return <GameBoard gameMode={gameMode} setGameMode={setGameMode} sides={sides} connection={connection} playerNumber={playerNumber} />
   }

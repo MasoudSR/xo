@@ -4,8 +4,9 @@ import OIcon from './modules/OIcon';
 import { useState } from 'react';
 import Modal from './Modal';
 import OnlineMultiplayer from './OnlineMultiplayer';
+import { Toaster } from 'react-hot-toast';
 
-function MainMenu({ setGameMode, sides, setSides, setConnection, setPlayerNumber }) {
+function MainMenu({ setGameMode, sides, setSides, connection, setConnection, setPlayerNumber }) {
 
     const [playMode, setPlayMode] = useState("")
     const [isQuit, setIsQuit] = useState(false)
@@ -57,8 +58,9 @@ function MainMenu({ setGameMode, sides, setSides, setConnection, setPlayerNumber
                     <button className={`h-10 transition-all duration-300  bg-white ${playMode === "ai" ? "w-32" : "w-0"}`} onClick={() => setGameMode("ai")}>Continue</button>
                 </button>
             </div>
-            {onlineMenu && <Modal ModalContent={<OnlineMultiplayer setConnection={setConnection} changeMode={changeMode} setPlayerNumber={setPlayerNumber} setOnlineMenu={setOnlineMenu} />} />
+            {onlineMenu && <Modal ModalContent={<OnlineMultiplayer connection={connection} setConnection={setConnection} changeMode={changeMode} setPlayerNumber={setPlayerNumber} setOnlineMenu={setOnlineMenu} />} />
             }
+            <div><Toaster /></div>
         </>
     )
 }
