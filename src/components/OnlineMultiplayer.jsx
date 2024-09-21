@@ -101,9 +101,9 @@ const OnlineMultiplayer = ({ setConnection, changeMode, setPlayerNumber, setOnli
   }
 
   return (
-    <div className={`bg-white/60 rounded-3xl flex flex-col w-screen max-w-sm drop-shadow-lg p-5 transition-all duration-500 ${mode === "normal" ? "gap-4" : "gap-0"} ${isClosed && "animate-jump-out"}`}>
+    <div className={`bg-white/60 rounded-3xl flex flex-col w-screen max-w-sm drop-shadow-lg transition-all duration-500 ${mode === "normal" ? "gap-4 p-4" : "gap-0 p-0"} ${isClosed && "animate-jump-out"}`}>
 
-      <div className={`transition-all duration-500 flex flex-col gap-2 overflow-hidden ${mode === "client" ? "max-h-0" : "max-h-96"}`}>
+      <div className={`transition-all duration-300 flex flex-col gap-2 overflow-hidden ${mode === "client" ? "max-h-0 scale-0" : "max-h-96 scale-100"}`}>
         <div
           className={`transition-all duration-500 bg-blue-600 rounded-xl overflow-hidden ${showHost ? "max-h-96" : "max-h-16"
             }`}>
@@ -113,7 +113,8 @@ const OnlineMultiplayer = ({ setConnection, changeMode, setPlayerNumber, setOnli
             onClick={() => {
               setShowHost(true)
               setMode("host")
-            }}>
+            }}
+            disabled={showHost}>
             Host
           </button>
           <div className='flex flex-col p-4 gap-3'>
@@ -145,7 +146,7 @@ const OnlineMultiplayer = ({ setConnection, changeMode, setPlayerNumber, setOnli
       </div>
 
 
-      <div className={`transition-all duration-500 flex flex-col gap-2 overflow-hidden ${mode === "host" ? "max-h-0" : "max-h-72"}`}>
+      <div className={`transition-all duration-300 flex flex-col gap-2 overflow-hidden ${mode === "host" ? "max-h-0 scale-0" : "max-h-72 scale-100"}`}>
         <div
           className={`transition-all duration-500 bg-blue-600 rounded-xl overflow-hidden ${showClient ? "max-h-80" : "max-h-16"
             }`}>
@@ -155,7 +156,8 @@ const OnlineMultiplayer = ({ setConnection, changeMode, setPlayerNumber, setOnli
             onClick={() => {
               setShowClient(true)
               setMode("client")
-            }}>
+            }}
+            disabled={showClient}>
             Client
           </button>
           {peerId ?
@@ -176,7 +178,7 @@ const OnlineMultiplayer = ({ setConnection, changeMode, setPlayerNumber, setOnli
 
         </div>
       </div>
-      <div className={`transition-all duration-300 overflow-hidden ${mode === "normal" ? "max-h-28" : "max-h-0"}`}>
+      <div className={`transition-all duration-300 overflow-hidden ${mode === "normal" ? "max-h-28 scale-100" : "max-h-0 scale-0"}`}>
         <button className={` p-3 mt-4 bg-slate-200 border border-slate-300 rounded-xl text-black w-full`} onClick={cancelHandler}>Cancel</button>
       </div>
     </div>
