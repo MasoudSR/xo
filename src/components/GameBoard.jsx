@@ -9,6 +9,7 @@ import Settings from './Settings';
 import GameResults from './GameResults';
 import { bestMove } from '../helpers/ai';
 import toast from 'react-hot-toast';
+import Chat from './Chat';
 
 function GameBoard({ gameMode, setGameMode, sides, connection, playerNumber }) {
 
@@ -22,6 +23,11 @@ function GameBoard({ gameMode, setGameMode, sides, connection, playerNumber }) {
     const [playerTurn, setPlayerTurn] = useState(true)
     const [lineDirection, setLineDirection] = useState("");
     const [playersName, setPlayersName] = useState({ player1: { name: "Player1", symbol: "x" }, player2: { name: "Player2", symbol: "o" } })
+    const [showChats, setShowChats] = useState(false)
+    const [chats, setChats] = useState([])
+    const [chatInputText, setChatInputText] = useState("")
+    const [isNewChat, setIsNewChat] = useState(false)
+
 
     useEffect(() => {
         sides.player === "o" && setPlayerTurn(false)
@@ -35,6 +41,7 @@ function GameBoard({ gameMode, setGameMode, sides, connection, playerNumber }) {
         }
     }, [])
 
+
     useEffect(() => {
         if (connection) {
             connection.on('data', (data) => {
@@ -44,14 +51,23 @@ function GameBoard({ gameMode, setGameMode, sides, connection, playerNumber }) {
                     setTimeout(() => {
                         toast("Your friend left the game!", { icon: "😢", duration: 5000 })
                     }, 1000);
-                } else {
-                    setTilesValue(data);
+                } else if (data.dataType === "chatData") {
+                    setChats(prev => [...prev, data.chatData])
+                    setIsNewChat(true)
+                } else if (data.dataType === "tilesData") {
+                    setTilesValue(data.tilesData);
                     setPlayerTurn(true)
                     setXIsNext((prevXIsNext) => !prevXIsNext);
                 }
             })
         }
     }, [connection]);
+
+    useEffect(() => {
+        if (showChats) {
+            setIsNewChat(false)
+        }
+    }, [isNewChat])
 
 
     const quit = () => {
@@ -90,10 +106,20 @@ function GameBoard({ gameMode, setGameMode, sides, connection, playerNumber }) {
 
             if (gameMode === "online") {
                 if (connection) {
-                    connection.send(newTilesValue);
+                    const data = { dataType: "tilesData", tilesData: newTilesValue }
+                    connection.send(data);
                 }
 
             }
+        }
+    }
+
+    const sendChat = () => {
+        if (connection) {
+            const data = { dataType: "chatData", chatData: { playerNumber: playerNumber, text: chatInputText } }
+            setChats(prev => [...prev, data.chatData])
+            connection.send(data)
+            setChatInputText("")
         }
     }
 
@@ -171,9 +197,20 @@ function GameBoard({ gameMode, setGameMode, sides, connection, playerNumber }) {
                     ></div>
                 </div>
             </div>
-            <div className='animate-fade-up animate-duration-500'>
-                <button className="m-auto mt-14 drop-shadow-md rounded-full overflow-hidden h-8 transition-all duration-300 flex justify-center items-center bg-white w-8" onClick={() => setSettingsMenu(true)}><IoMdSettings size={20} color='#4281f8' /></button>
+            <div className={`flex mt-14 justify-center`}>
+                <button className="drop-shadow-md rounded-full overflow-hidden h-10 transition-all duration-300 flex justify-center items-center bg-white w-10" onClick={() => setSettingsMenu(true)}><IoMdSettings size={20} color='#4281f8' /></button>
             </div>
+            {gameMode === "online" &&
+                <div className=''>
+                    <Chat showChats={showChats} setShowChats={setShowChats} sendChat={sendChat} chats={chats} chatInputText={chatInputText} setChatInputText={setChatInputText} setIsNewChat={setIsNewChat} />
+                    {isNewChat &&
+                        <div>
+                            <div className="bg-orange-500 w-3 h-3 fixed bottom-20 left-10 rounded-full"></div>
+                            <div className="bg-orange-500 w-3 h-3 fixed bottom-20 left-10 rounded-full animate-ping"></div>
+                        </div>
+                    }
+                </div>
+            }
             {settingsMenu && <Modal ModalContent={<Settings quit={quit} setSettingsMenu={setSettingsMenu} />} />}
             {showGameResults && <Modal ModalContent={<GameResults quit={quit} setShowGameResults={setShowGameResults} winner={winner} playersName={playersName} restartGame={restartGame} scoreBoard={scoreBoard} />} />}
         </div>
