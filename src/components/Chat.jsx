@@ -10,8 +10,8 @@ function Chat({ showChats, setShowChats, sendChat, chats, chatInputText, setChat
     };
 
     return (
-        <div className={`transition-all duration-500 flex justify-between flex-col drop-shadow-lg backdrop-blur-sm fixed rounded-[25px] overflow-hidden max-w-lg ${showChats ? "w-screen h-screen bottom-0 left-0 p-7 bg-white/70" : `w-12 h-12 p-0 bottom-10 left-10 bg-white/100 `}`}>
-            <div className="flex gap-16">
+        <div className={`transition-all duration-500 flex justify-between flex-col drop-shadow-lg backdrop-blur-sm fixed rounded-[25px] overflow-hidden max-w-lg ${showChats ? "w-full h-full bottom-0 left-0 p-7 bg-white/70" : `w-12 h-12 p-0 bottom-10 left-10 bg-white/100 `}`}>
+            <div className="flex gap-16 items-center">
 
                 <button className='flex justify-center' onClick={() => {
                     setShowChats(!showChats)
