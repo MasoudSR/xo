@@ -39,6 +39,15 @@ function GameBoard({ gameMode, setGameMode, sides, connection, playerNumber }) {
         if (playerNumber === 2) {
             setPlayerTurn(false)
         }
+
+        if (gameMode === "online") {
+            window.addEventListener("beforeunload", () => {
+                if (connection && connection.open) {
+                    connection.send("quit");
+                    connection.close();
+                }
+            });
+        }
     }, [])
 
 
