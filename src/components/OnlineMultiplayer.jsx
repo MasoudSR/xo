@@ -13,9 +13,12 @@ const OnlineMultiplayer = ({ setConnection, changeMode, setPlayerNumber, setOnli
   const [isClosed, setIsClosed] = useState(false)
   const [isConnecting, setIsConnecting] = useState(false)
 
+  const customPeerIdGenerator = () => (Math.random().toString(36) + "0000000000000000000").substr(2, 8);
+
 
   useEffect(() => {
-    const newPeer = new Peer({
+    const newPeerId = customPeerIdGenerator()
+    const newPeer = new Peer(newPeerId,{
       config: {
         'iceServers': [
           {
@@ -122,7 +125,7 @@ const OnlineMultiplayer = ({ setConnection, changeMode, setPlayerNumber, setOnli
               <div className="flex text-white justify-between items-center">
                 <div>
                   <p className="text-xs">Send your id to your friend</p>
-                  <p className="text-sm w-full mr-2">{peerId ? peerId : "Loading your id"}</p>
+                  <p className="text-xl w-full mr-2">{peerId ? peerId : "Loading your id"}</p>
                 </div>
                 <button
                   className={`transition-all duration-300 flex flex-col border justify-center items-center rounded-lg w-12 h-12  border-gray-200 ${peerId ? "scale-100" : "scale-0"}`}
@@ -173,7 +176,7 @@ const OnlineMultiplayer = ({ setConnection, changeMode, setPlayerNumber, setOnli
             : <div className='flex flex-col justify-center items-center p-4'>
               <div className='rounded-full border-4 w-3 border-slate-300 border-t-lime-500 p-4 animate-spin'></div>
               <p className='text-white'>Preparing...</p>
-              <button className='bg-white w-full px-5 mt-2 py-2 rounded-xl' onClick={() => backHandler()}>Back</button>
+              <button className='bg-blue-500 text-white w-full px-5 mt-2 py-3 rounded-xl' onClick={() => backHandler()}>Back</button>
             </div>}
 
         </div>
