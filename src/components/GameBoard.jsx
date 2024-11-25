@@ -11,7 +11,7 @@ import { bestMove } from '../helpers/ai';
 import toast from 'react-hot-toast';
 import Chat from './Chat';
 
-function GameBoard({ gameMode, setGameMode, sides, connection, playerNumber }) {
+function GameBoard({ gameMode, setGameMode, sides, connection, playerNumber , difficulty }) {
 
     const [tilesValue, setTilesValue] = useState(Array(9).fill(""))
     const [xIsNext, setXIsNext] = useState(true)
@@ -136,7 +136,7 @@ function GameBoard({ gameMode, setGameMode, sides, connection, playerNumber }) {
     if (gameMode === "ai" && !winner && !playerTurn) {
         const newTilesValue = tilesValue.slice()
         if (!winnerCalc(newTilesValue) && newTilesValue.some(tile => tile === "")) {
-            const aiMove = bestMove(tilesValue, sides);
+            const aiMove = bestMove(tilesValue, sides , difficulty);
             newTilesValue[aiMove] = sides.ai;
             setTilesValue(newTilesValue);
             setXIsNext(!xIsNext)
